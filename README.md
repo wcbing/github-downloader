@@ -1,0 +1,58 @@
+# Github Releases 更新下载
+
+根据 `data/github.json` 定义内容检查 Github Releases 更新并下载特定文件。
+
+## 用法
+```
+Usage: 
+    -h, --help          Show this help message
+    -r, --recursive     Recursive create directory, like: 
+                        'https:/github.com/<user>/<repo>/releases/
+                        download/<version-tag>/<filename>'
+                        Default like: 'releases/<user>/<repo>/<filename>'
+    --dry-run           Dry run with HTTP head method (do not download)
+
+用法: 
+    -h, --help          显示该帮助信息
+    -r, --recursive     递归的创建目录，文件路径: 
+                        'https:/github.com/<user>/<repo>/releases/
+                        download/<version-tag>/<filename>'
+                        默认情况: 'releases/<user>/<repo>/<filename>'
+    --dry-run           用 http 的 head 方法试运行（不下载文件）
+```
+
+## 配置文件格式
+
+`data/github.json` 样例
+
+```json
+{
+    "rustdesk": {
+        "repo": "rustdesk/rustdesk",
+        "file_list": [
+            "rustdesk-{version_tag}-x86_64.deb"
+        ]
+    },
+    "draw.io": {
+        "repo": "jgraph/drawio-desktop",
+        "file_list": [
+            "drawio-amd64-{stripped_version}.deb"
+        ]
+    }
+}
+```
+
+说明：
+
+- `"repo": xxx`  
+github 仓库名，形如：user/repo。
+- `"file_list": []`  
+文件名列表，可包含以下变量。
+- `{version_tag}`  
+用于代替文件名中和 Releases Tag 相同的部分。
+- `{stripped_version}`  
+用于一些 Tag 是 `v1.1.0`，但是文件名中是 `1.1.0` 的情况。
+
+## Todo
+
+- `-p, --proxy <url>` 使用 Github 下载代理
