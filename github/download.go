@@ -14,6 +14,7 @@ import (
 // url: 下载地址
 // repo: "user/repo"
 func Download(url, repo string) {
+	// 检查是否为 dry-run 模式
 	if config.Config["dry-run"] {
 		resp, err := http.Head(url)
 		if err != nil {
@@ -44,7 +45,7 @@ func Download(url, repo string) {
 		log.Print(err)
 		return
 	}
-	// 写入文件
+	// 创建目录并写入文件
 	var fileDir, filePath string
 	if config.Config["recursive"] {
 		fileDir = filepath.Dir(url)
