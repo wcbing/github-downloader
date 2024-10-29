@@ -5,20 +5,24 @@
 ## 用法
 ```
 Usage: 
-    -h, --help          Show this help message
-    -r, --recursive     Recursive create directory, like: 
-                        'https:/github.com/<user>/<repo>/releases/
-                        download/<version-tag>/<filename>'
-                        Default like: 'releases/<user>/<repo>/<filename>'
-    --dry-run           Dry run with HTTP head method (do not download)
+    -d, --dir <data_dir>    Read repo config from <data_dir>
+    -h, --help              Show this help message
+    -p, --proxy <url>       Download files from github proxy <url>
+    -r, --recursive         Recursive create directory, like: 
+                            'https:/github.com/<user>/<repo>/releases/
+                            download/<version-tag>/<filename>'
+                            Default like: 'releases/<user>/<repo>/<filename>'
+    --dry-run               Dry run with HTTP head method (do not download)
 
 用法: 
-    -h, --help          显示该帮助信息
-    -r, --recursive     递归的创建目录，文件路径: 
-                        'https:/github.com/<user>/<repo>/releases/
-                        download/<version-tag>/<filename>'
-                        默认情况: 'releases/<user>/<repo>/<filename>'
-    --dry-run           用 http 的 head 方法试运行（不下载文件）
+    -d, --dir <data_dir>    从 <data_dir> 读取仓库配置
+    -h, --help              显示该帮助信息
+    -p, --proxy <url>       从 Github 代理 <url> 下载文件
+    -r, --recursive         递归的创建目录，文件路径: 
+                            'https:/github.com/<user>/<repo>/releases/
+                            download/<version-tag>/<filename>'
+                            默认情况: 'releases/<user>/<repo>/<filename>'
+    --dry-run               用 http 的 head 方法试运行（不下载文件）
 ```
 
 ## 配置文件格式
@@ -55,4 +59,6 @@ github 仓库名，形如：user/repo。
 
 ## Todo
 
-- `-p, --proxy <url>` 使用 Github 下载代理
+- ~~`-p, --proxy <url>` 使用 Github 下载代理~~
+- ~~`-d, --dir <data_dir>` 指定仓库配置所在目录~~
+- 限制并发数量

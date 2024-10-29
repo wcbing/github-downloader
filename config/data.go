@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"log"
 	"os"
+	"path/filepath"
 )
 
 type GithubRepo struct {
@@ -19,10 +20,10 @@ type GithubRepo struct {
 
 // 读取 github.json
 func ReadRepo() (repoList map[string]GithubRepo) {
-	if content, err := os.ReadFile("data/github.json"); err != nil {
+	if content, err := os.ReadFile(filepath.Join(DataDir, "github.json")); err != nil {
 		log.Fatal(err)
 	} else if err := json.Unmarshal(content, &repoList); err != nil {
-		log.Fatal("data/github.json :", err)
+		log.Fatal(filepath.Join(DataDir, "github.json"), err)
 	}
 	return
 }
@@ -32,13 +33,13 @@ func ReadRepo() (repoList map[string]GithubRepo) {
 
 // 读取 github-local.json
 func ReadVersion() (versionList map[string]string) {
-	if content, err := os.ReadFile("data/github-local.json"); err != nil {
+	if content, err := os.ReadFile(filepath.Join(DataDir, "github-local.json")); err != nil {
 		log.Print(err)
 		versionList = make(map[string]string)
 	} else if len(content) == 0 || string(content) == "null" {
 		versionList = make(map[string]string)
 	} else if err := json.Unmarshal(content, &versionList); err != nil {
-		log.Fatal("data/github-local.json :", err)
+		log.Fatal(filepath.Join(DataDir, "github-local.json"), err)
 	}
 	return
 }
@@ -47,7 +48,7 @@ func ReadVersion() (versionList map[string]string) {
 func SaveVersion(versionList map[string]string) {
 	if content, err := json.MarshalIndent(versionList, "", "    "); err != nil {
 		log.Fatal(err)
-	} else if err := os.WriteFile("data/github-local.json", content, 0644); err != nil {
-		log.Fatal("data/github-local.json", err)
+	} else if err := os.WriteFile(filepath.Join(DataDir, "github-local.json"), content, 0644); err != nil {
+		log.Fatal(filepath.Join(DataDir, "github-local.json"), err)
 	}
 }

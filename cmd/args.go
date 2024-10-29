@@ -8,31 +8,48 @@ import (
 )
 
 var helpMessage = `Usage: 
-    -h, --help          Show this help message
-    -r, --recursive     Recursive create directory, like: 
-                        'https:/github.com/<user>/<repo>/releases/
-                        download/<version-tag>/<filename>'
-                        Default like: 'releases/<user>/<repo>/<filename>'
-    --dry-run           Dry run with HTTP head method (do not download)
+    -d, --dir <data_dir>    Read repo config from <data_dir>
+    -h, --help              Show this help message
+    -p, --proxy <url>       Download files from github proxy <url>
+    -r, --recursive         Recursive create directory, like: 
+                            'https:/github.com/<user>/<repo>/releases/
+                            download/<version-tag>/<filename>'
+                            Default like: 'releases/<user>/<repo>/<filename>'
+    --dry-run               Dry run with HTTP head method (do not download)
 
 用法: 
-    -h, --help          显示该帮助信息
-    -r, --recursive     递归的创建目录，文件路径: 
-                        'https:/github.com/<user>/<repo>/releases/
-                        download/<version-tag>/<filename>'
-                        默认情况: 'releases/<user>/<repo>/<filename>'
-    --dry-run           用 http 的 head 方法试运行（不下载文件）
+    -d, --dir <data_dir>    从 <data_dir> 读取仓库配置
+    -h, --help              显示该帮助信息
+    -p, --proxy <url>       从 Github 代理 <url> 下载文件
+    -r, --recursive         递归的创建目录，文件路径: 
+                            'https:/github.com/<user>/<repo>/releases/
+                            download/<version-tag>/<filename>'
+                            默认情况: 'releases/<user>/<repo>/<filename>'
+    --dry-run               用 http 的 head 方法试运行（不下载文件）
 `
 
 // 读取命令行参数
 func ReadArgs() {
 	args := os.Args
 	if len(args) > 1 {
-		for _, arg := range args {
+		for i, arg := range args {
 			switch arg {
+			case "-d", "--dir":
+				config.Config["dir"] = true
+				// 读取下一个参数作为文件路径
+				if i+1 < len(args) {
+					config.DataDir = args[i+1]
+				}
 			case "-h", "--help":
+				// 显示帮助信息并退出
 				fmt.Print(helpMessage)
 				os.Exit(0)
+			case "-p", "--proxy":
+				config.Config["proxy"] = true
+				// 读取下一个参数作为代理地址
+				if i+1 < len(args) {
+					config.Proxy = args[i+1]
+				}
 			case "-r", "--recursive":
 				config.Config["recursive"] = true
 			case "--dry-run":
