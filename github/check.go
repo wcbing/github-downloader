@@ -2,6 +2,7 @@ package github
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"path/filepath"
 	"strings"
@@ -21,41 +22,50 @@ func Check(name string, repo config.GithubRepo, localVersion string) (versionTag
 	wg := sync.WaitGroup{}
 	repoUrl := config.Proxy + "https://github.com/" + repo.Repo
 	versionTag = LatestVersionTag(repoUrl)
-	releasesDownloadUrl := repoUrl + "/releases/download"
 	fmt.Printf("%s: %s\n", name, versionTag)
 	// 判断是否需要更新
-	if localVersion == "" {
-		fmt.Printf("└  Add: %s\n", versionTag)
+	if localVersion != versionTag {
+		releasesDownloadUrl := repoUrl + "/releases/download"
+		// 确定本地文件目录并确保目录存在
+		var fileDir string
+		if config.Config["recursive"] {
+			fileDir = filepath.Join(releasesDownloadUrl, versionTag)
+		} else {
+			fileDir = filepath.Join("releases", strings.ReplaceAll(repo.Repo, "/", "__"))
+		}
+		if _, err := os.Stat(fileDir); os.IsNotExist(err) {
+			if err := os.MkdirAll(fileDir, 0755); err != nil {
+				log.Print(err)
+			}
+		}
+		// 下载新版本文件
 		for _, templates := range repo.FileList {
 			fileName := replaceFileName(versionTag, templates)
 			fileUrl := fmt.Sprintf("%s/%s/%s", releasesDownloadUrl, versionTag, fileName)
+			filePath := filepath.Join(fileDir, fileName)
 			wg.Add(1)
 			go func() {
 				defer wg.Done()
-				// 下载
-				Download(fileUrl, repo.Repo)
+				Download(fileUrl, filePath)
 			}()
 		}
-	} else if localVersion != versionTag {
-		fmt.Printf("└  update: %s -> %s\n", localVersion, versionTag)
-		for _, templates := range repo.FileList {
-			fileName := replaceFileName(versionTag, templates)
-			fileUrl := fmt.Sprintf("%s/%s/%s", releasesDownloadUrl, versionTag, fileName)
-			oldFilePath := filepath.Join("releases", repo.Repo, replaceFileName(localVersion, templates))
-			wg.Add(1)
-			go func() {
-				defer wg.Done()
-				// 下载并删除旧版本文件
-				Download(fileUrl, repo.Repo)
-				if !config.Config["recursive"] && !config.Config["dry-run"] {
+		// 判断是否是新添加应用
+		if localVersion == "" {
+			fmt.Printf("└  Add: %s\n", versionTag)
+		} else {
+			fmt.Printf("└  update: %s -> %s\n", localVersion, versionTag)
+			// 删除旧版本文件
+			if !config.Config["dry-run"] && !config.Config["recursive"] {
+				// 对非 "recursive" 的，依次删除旧版本文件
+				for _, templates := range repo.FileList {
+					oldFilePath := filepath.Join(fileDir, replaceFileName(localVersion, templates))
 					os.Remove(oldFilePath)
 				}
-			}()
-		}
-		// 删除旧版本目录
-		if config.Config["recursive"] && !config.Config["dry-run"] {
-			localFileDir := fmt.Sprintf("%s/%s", releasesDownloadUrl, localVersion)
-			os.RemoveAll(localFileDir)
+			} else if !config.Config["dry-run"] && config.Config["recursive"] {
+				// 对 "recursive" 的，直接删除旧版本目录
+				oldFileDir := filepath.Join(releasesDownloadUrl, localVersion)
+				os.RemoveAll(oldFileDir)
+			}
 		}
 	}
 	wg.Wait()
