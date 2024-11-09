@@ -2,6 +2,17 @@
 
 根据 `data/github.json` 定义内容检查 Github Releases 更新并下载特定文件。
 
+主要用于服务访问 Github 受限（无法访问、访问速度慢）的人群。
+
+## 下载、安装
+
+若需要预编译的可执行文件，请点击 [releases](https://github.com/wcbing/github-downloader/releases)
+
+若您系统安装有 Go，可以直接执行
+```sh
+go install github.com/wcbing/github-downloader@latest
+```
+
 ## 用法
 ```
 Usage: 
@@ -24,6 +35,20 @@ Usage:
                             默认路径: 'releases/<user>__<repo>/<filename>'
     --dry-run               用 http 的 head 方法试运行（不下载文件）
 ```
+
+具体用途
+
+- `-r`
+    - 不使用 `-r`  
+    适用于做文件服务器、镜像站
+    - 使用 `-r`  
+    适用于 Github 下载加速
+        - 作为文件服务器实现下载加速（对标“反代”类加速的形式）
+        - 配合 301 重定向，用于转发到其他下载加速服务
+- `-p`
+    - 使用 `-p`  
+    适用于服务器访问 Github 受限
+
 
 ## 配置文件格式
 
