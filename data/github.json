@@ -10,5 +10,11 @@
         "file_list": [
             "drawio-amd64-{stripped_version}.deb"
         ]
+    },
+    "nxtrace": {
+        "repo": "nxtrace/NTrace-core",
+        "file_list": [
+            "nexttrace_linux_amd64"
+        ]
     }
 }

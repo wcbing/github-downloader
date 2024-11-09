@@ -58,6 +58,10 @@ func Check(name string, repo config.GithubRepo, localVersion string) (versionTag
 			if !config.Config["dry-run"] && !config.Config["recursive"] {
 				// 对非 "recursive" 的，依次删除旧版本文件
 				for _, templates := range repo.FileList {
+					// 如果模板中不包含 {stripped_version} 或 {version_tag}，则不删除
+					if !strings.Contains(templates, "{stripped_version}") && !strings.Contains(templates, "{version_tag}") {
+						continue
+					}
 					oldFilePath := filepath.Join(fileDir, replaceFileName(localVersion, templates))
 					os.Remove(oldFilePath)
 				}
