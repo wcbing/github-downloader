@@ -29,9 +29,9 @@ func Check(name string, repo config.GithubRepo, localVersion string) (versionTag
 		// 确定本地文件目录并确保目录存在
 		var fileDir string
 		if config.Config["recursive"] {
-			fileDir = filepath.Join(releasesDownloadUrl, versionTag)
+			fileDir = filepath.Join(config.OutputDir, releasesDownloadUrl, versionTag)
 		} else {
-			fileDir = filepath.Join("releases", strings.ReplaceAll(repo.Repo, "/", "__"))
+			fileDir = filepath.Join(config.OutputDir, strings.ReplaceAll(repo.Repo, "/", "__"))
 		}
 		if _, err := os.Stat(fileDir); os.IsNotExist(err) {
 			if err := os.MkdirAll(fileDir, 0755); err != nil {
