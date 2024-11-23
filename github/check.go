@@ -67,7 +67,7 @@ func Check(name string, repo config.GithubRepo, localVersion string) (versionTag
 				}
 			} else if !config.Config["dry-run"] && config.Config["recursive"] {
 				// 对 "recursive" 的，直接删除旧版本目录
-				oldFileDir := filepath.Join(releasesDownloadUrl, localVersion)
+				oldFileDir := filepath.Join(config.OutputDir, releasesDownloadUrl, localVersion)
 				os.RemoveAll(oldFileDir)
 			}
 		}
