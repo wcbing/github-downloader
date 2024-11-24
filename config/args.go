@@ -1,11 +1,8 @@
-package cmd
+package config
 
 import (
-	"fmt"
-	"log"
+	"flag"
 	"os"
-
-	"github.com/wcbing/github-downloader/config"
 )
 
 var helpMessage = `Usage: 
@@ -33,41 +30,32 @@ var helpMessage = `Usage:
 
 // 读取命令行参数
 func ReadArgs() {
-	args := os.Args
-	if len(args) > 1 {
-		for i, arg := range args {
-			switch arg {
-			case "-d", "--data":
-				config.Config["data_dir"] = true
-				// 读取下一个参数作为文件路径
-				if i+1 < len(args) {
-					config.DataDir = args[i+1]
-				} else {
-					log.Fatal("-d/--data requires a non-empty argument")
-				}
-			case "-o", "--output":
-				config.Config["output_dir"] = true
-				// 读取下一个参数作为文件路径
-				if i+1 < len(args) {
-					config.OutputDir = args[i+1]
-				} else {
-					log.Fatal("-o/--output requires a non-empty argument")
-				}
-			case "-h", "--help":
-				// 显示帮助信息并退出
-				fmt.Print(helpMessage)
-				os.Exit(0)
-			case "-p", "--proxy":
-				config.Config["proxy"] = true
-				// 读取下一个参数作为代理地址
-				if i+1 < len(args) {
-					config.Proxy = args[i+1]
-				}
-			case "-r", "--recursive":
-				config.Config["recursive"] = true
-			case "--dry-run":
-				config.Config["dry-run"] = true
-			}
-		}
+	// data_dir
+	flag.StringVar(&DataDir, "d", "data", "")
+	flag.StringVar(&DataDir, "data", "data", "")
+	// output_dir
+	flag.StringVar(&OutputDir, "o", ".", "")
+	flag.StringVar(&OutputDir, "output", ".", "")
+	// proxy
+	flag.StringVar(&Proxy, "p", "", "")
+	flag.StringVar(&Proxy, "proxy", "", "")
+	// recursive
+	var recursive bool
+	flag.BoolVar(&recursive, "r", false, "")
+	flag.BoolVar(&recursive, "recursive", false, "")
+	// dry_run
+	dry_run := flag.Bool("dry-run", false, "")
+	// help
+	var help bool
+	flag.BoolVar(&help, "h", false, "")
+	flag.BoolVar(&help, "help", false, "")
+
+	flag.Parse()
+
+	if help {
+		print(helpMessage)
+		os.Exit(0)
 	}
+	Config["recursive"] = recursive
+	Config["dry-run"] = *dry_run
 }

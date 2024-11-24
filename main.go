@@ -3,13 +3,12 @@ package main
 import (
 	"sync"
 
-	"github.com/wcbing/github-downloader/cmd"
 	"github.com/wcbing/github-downloader/config"
 	"github.com/wcbing/github-downloader/github"
 )
 
 func main() {
-	cmd.ReadArgs()
+	config.ReadArgs()
 
 	var repoList = config.ReadRepo()
 	var versionList = config.ReadVersion()
