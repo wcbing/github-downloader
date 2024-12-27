@@ -22,7 +22,7 @@ func Check(name string, repo config.GithubRepo, localVersion string) (versionTag
 	wg := sync.WaitGroup{}
 	repoUrl := config.Proxy + "https://github.com/" + repo.Repo
 	versionTag = LatestVersionTag(repoUrl)
-	fmt.Printf("%s: %s\n", name, versionTag)
+	log.Printf("%s = %s\n", name, versionTag)
 	// 判断是否需要更新
 	if localVersion != versionTag {
 		releasesDownloadUrl := repoUrl + "/releases/download"
@@ -51,9 +51,9 @@ func Check(name string, repo config.GithubRepo, localVersion string) (versionTag
 		}
 		// 判断是否是新添加应用
 		if localVersion == "" {
-			fmt.Printf("└  Add: %s\n", versionTag)
+			fmt.Printf("AddNew: %s (%s)\n", name, versionTag)
 		} else {
-			fmt.Printf("└  update: %s -> %s\n", localVersion, versionTag)
+			fmt.Printf("Update: %s (%s -> %s)\n", name, localVersion, versionTag)
 			// 删除旧版本文件
 			if !config.Config["dry-run"] && !config.Config["recursive"] {
 				// 对非 "recursive" 的，依次删除旧版本文件
