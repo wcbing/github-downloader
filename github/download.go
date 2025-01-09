@@ -40,13 +40,15 @@ func Download(url, filePath string) {
 		return
 	}
 	log.Printf("downloading: %s", url)
-	content, err := io.ReadAll(resp.Body)
+	// 使用流式复制减少内存占用
+	out, err := os.Create(filePath)
 	if err != nil {
 		log.Print(err)
 		return
 	}
-	// 保存文件
-	if err := os.WriteFile(filePath, content, 0644); err != nil {
+	defer out.Close()
+	_, err = io.Copy(out, resp.Body)
+	if err != nil {
 		log.Print(err)
 	}
 }
