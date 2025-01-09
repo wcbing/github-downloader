@@ -6,6 +6,7 @@ var (
 	DataDir   string // Config file Directory
 	OutputDir string // Output file Directory
 	Proxy     string // Github proxy url
+	Thread    int    // Concurrent download number
 )
 
 func init() {
@@ -13,4 +14,5 @@ func init() {
 	DataDir = "data"
 	OutputDir = "."
 	Proxy = ""
+	Thread = 5
 }

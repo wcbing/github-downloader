@@ -20,6 +20,9 @@ func replaceFileName(latestVersion, templates string) (fileName string) {
 
 func Check(name string, repo config.GithubRepo, localVersion string) (versionTag string) {
 	wg := sync.WaitGroup{}
+	thread := config.Thread
+	sem := make(chan struct{}, thread) // Semaphore
+
 	repoUrl := config.Proxy + "https://github.com/" + repo.Repo
 	versionTag = LatestVersionTag(repoUrl)
 	log.Printf("%s = %s\n", name, versionTag)
@@ -44,10 +47,12 @@ func Check(name string, repo config.GithubRepo, localVersion string) (versionTag
 			fileUrl := fmt.Sprintf("%s/%s/%s", releasesDownloadUrl, versionTag, fileName)
 			filePath := filepath.Join(fileDir, fileName)
 			wg.Add(1)
-			go func() {
+			go func(fileUrl, filePath string) {
 				defer wg.Done()
+				sem <- struct{}{}        // 获取许可
+				defer func() { <-sem }() // 释放许可
 				Download(fileUrl, filePath)
-			}()
+			}(fileUrl, filePath)
 		}
 		// 判断是否是新添加应用
 		if localVersion == "" {

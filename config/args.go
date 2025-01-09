@@ -11,6 +11,7 @@ var helpMessage = `Usage:
     -h, --help              Show this help message
     -p, --proxy <url>       Download files from github proxy <url>
     -r, --recursive         Recursive create directory, file save path like: 
+    -t, --thread <number>   The number of concurrent download threads, default is 5
                             'https:/github.com/<user>/<repo>/releases/
                             download/<version-tag>/<filename>'
                             Default path like: '<user>__<repo>/<filename>'
@@ -22,6 +23,7 @@ var helpMessage = `Usage:
     -h, --help              显示该帮助信息
     -p, --proxy <url>       从 Github 代理 <url> 下载文件
     -r, --recursive         递归的创建目录，文件保存路径: 
+    -t, --thread <number>   并发下载线程数量，默认为 5
                             'https:/github.com/<user>/<repo>/releases/
                             download/<version-tag>/<filename>'
                             默认路径: '<user>__<repo>/<filename>'
@@ -43,8 +45,11 @@ func ReadArgs() {
 	var recursive bool
 	flag.BoolVar(&recursive, "r", false, "")
 	flag.BoolVar(&recursive, "recursive", false, "")
-	// dry_run
-	dry_run := flag.Bool("dry-run", false, "")
+	// dryRun
+	dryRun := flag.Bool("dry-run", false, "")
+	// thread
+	flag.IntVar(&Thread, "c", 5, "") // 默认并发数为5
+	flag.IntVar(&Thread, "thread", 5, "")
 	// help
 	var help bool
 	flag.BoolVar(&help, "h", false, "")
@@ -57,5 +62,5 @@ func ReadArgs() {
 		os.Exit(0)
 	}
 	Config["recursive"] = recursive
-	Config["dry-run"] = *dry_run
+	Config["dry-run"] = *dryRun
 }
