@@ -3,8 +3,8 @@ package main
 import (
 	"sync"
 
-	"github.com/wcbing/github-downloader/config"
-	"github.com/wcbing/github-downloader/github"
+	"github.com/wcbing/github-downloader/internal/config"
+	"github.com/wcbing/github-downloader/internal/github"
 )
 
 func main() {

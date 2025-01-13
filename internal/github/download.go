@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/wcbing/github-downloader/config"
+	"github.com/wcbing/github-downloader/internal/config"
 )
 
 // 下载文件

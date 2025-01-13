@@ -8,7 +8,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/wcbing/github-downloader/config"
+	"github.com/wcbing/github-downloader/internal/config"
 )
 
 // 拼接得到文件名
