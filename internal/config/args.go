@@ -13,8 +13,8 @@ var helpMessage = `Usage:
     -t, --thread <number>   The number of concurrent download threads, default is 5
     -r, --recursive         Recursive create directory, file save path like: 
                             'https:/github.com/<user>/<repo>/releases/
-                            download/<version-tag>/<filename>'
-                            Default path like: '<user>__<repo>/<filename>'
+                            download/<releases_tag>/<filename>'
+                            Default path like: '<name>/<filename>'
     --dry-run               Dry run with HTTP head method (do not download)
 
 用法: 
@@ -26,7 +26,7 @@ var helpMessage = `Usage:
     -r, --recursive         递归的创建目录，文件保存路径: 
                             'https:/github.com/<user>/<repo>/releases/
                             download/<version-tag>/<filename>'
-                            默认路径: '<user>__<repo>/<filename>'
+                            默认路径: '<name>/<filename>'
     --dry-run               用 http 的 head 方法试运行（不下载文件）
 `
 

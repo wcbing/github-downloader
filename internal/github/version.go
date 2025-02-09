@@ -7,7 +7,7 @@ import (
 
 // 获取最新版本标签
 // repoUrl: "https://github.com/user/repo"
-func LatestVersionTag(repoUrl string) (versionTag string) {
+func latestReleasesTag(repoUrl string) (releasesTag string) {
 	// 禁止重定向
 	clientWithoutRedirect := &http.Client{
 		CheckRedirect: func(req *http.Request, via []*http.Request) error {
@@ -23,7 +23,7 @@ func LatestVersionTag(repoUrl string) (versionTag string) {
 	// 正则获取最新版本标签
 	re := regexp.MustCompile(`.*releases/tag/([^/]+)`)
 	if match := re.FindStringSubmatch(resp.Header.Get("Location")); len(match) > 1 {
-		versionTag = match[1]
+		releasesTag = match[1]
 	}
-	return versionTag
+	return
 }

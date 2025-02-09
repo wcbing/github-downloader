@@ -2,13 +2,13 @@
     "rustdesk": {
         "repo": "rustdesk/rustdesk",
         "file_list": [
-            "rustdesk-{version_tag}-x86_64.deb"
+            "rustdesk-{releases_tag}-x86_64.deb"
         ]
     },
     "draw.io": {
         "repo": "jgraph/drawio-desktop",
         "file_list": [
-            "drawio-amd64-{stripped_version}.deb"
+            "drawio-amd64-{version}.deb"
         ]
     },
     "nxtrace": {
