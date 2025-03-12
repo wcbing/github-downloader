@@ -13,7 +13,8 @@ import (
 
 // 拼接得到文件名
 func replaceFileName(releasesTag, file_template string) (fileName string) {
-	tmpname := strings.ReplaceAll(file_template, "{version}", releasesTag[1:])
+	version := stripVerison(releasesTag)
+	tmpname := strings.ReplaceAll(file_template, "{version}", version)
 	fileName = strings.ReplaceAll(tmpname, "{releases_tag}", releasesTag)
 	return
 }
