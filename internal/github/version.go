@@ -27,3 +27,12 @@ func latestReleasesTag(repoUrl string) (releasesTag string) {
 	}
 	return
 }
+
+// 提取版本号
+func stripVerison(releasesTag string) (version string) {
+	re := regexp.MustCompile(`[0-9].*`)
+	if match := re.FindString(releasesTag); len(match) > 0 {
+		version = match
+	}
+	return
+}
